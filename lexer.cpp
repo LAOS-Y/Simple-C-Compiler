@@ -307,14 +307,17 @@ void print(SymbolTable &st){
     }
 }
 
-int main(){
+int main(int argc, char *argv[]){
     std::string code;
     std::ifstream file;
 
+    if (argc == 1){
+        std::cerr << "No source file" << std::endl; 
+    }
+
     file.exceptions (std::ifstream::failbit | std::ifstream::badbit);
-    try 
-    {
-        file.open("source.c");
+    try {
+        file.open(argv[1]);
         std::stringstream stream;
 
         stream << file.rdbuf();
@@ -323,8 +326,7 @@ int main(){
 
         code = stream.str();
     }
-    catch (std::ifstream::failure e)
-    {
+    catch (std::ifstream::failure e){
         std::cout << "ERROR::FILE NOT SUCCESSFULLY READ" << std::endl;
     }
 
