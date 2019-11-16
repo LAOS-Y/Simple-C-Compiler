@@ -2,6 +2,8 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
+#include <iomanip>
+#include <json.hpp>
 
 #include "lexer.h"
 
@@ -278,35 +280,6 @@ SymbolTable tokenize(std::string code){
     return symbol_table;
 }
 
-void print(SymbolTable &st){
-    for (SymbolTable::iterator it = st.begin(); it != st.end(); it++){
-        Symbol symbol = *it;
-
-        std::cout << token2str[it->token] << ' ';
-
-        if (it->token == Token::INT_CONSTANT){
-            std::cout << *((int*)(it->ptr)) << std::endl;
-            continue;
-        }
-
-        if (it->token == Token::FLOAT_CONSTANT){
-            std::cout << *((float*)(it->ptr)) << std::endl;
-            continue;
-        }
-
-        if (it->token == Token::DOUBLE_CONSTANT){
-            std::cout << *((double*)(it->ptr)) << std::endl;
-            continue;
-        }
-            
-        if (it->token == Token::IDENTIFIER){
-            std::cout << *((std::string*)(it->ptr)) << std::endl;
-            continue;
-        }
-        std::cout << "NULL" << std::endl;
-    }
-}
-
 int main(int argc, char *argv[]){
     std::string code;
     std::ifstream file;
@@ -342,5 +315,9 @@ int main(int argc, char *argv[]){
     }
 
     print(symbol_table);
+
+    std::ofstream o("symbol_table.json");
+    o << std::setw(4) << symbolTable2Json(symbol_table) << std::endl;
+
     return 0;
 }

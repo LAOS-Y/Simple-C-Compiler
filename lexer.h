@@ -1,6 +1,7 @@
 #include<map>
 #include<string>
 #include <vector>
+#include <json.hpp>
 
 enum Token{
     // Punctuators
@@ -266,3 +267,71 @@ struct Symbol{
 };
 
 typedef std::vector<Symbol> SymbolTable;
+
+nlohmann::json symbol2Json(Symbol symbol){
+    nlohmann::json j;
+    j["type"] = token2str[symbol.token];
+
+    if (symbol.token == Token::INT_CONSTANT){
+        j["value"] = *((int*)(symbol.ptr));
+        return j;
+    }
+
+    if (symbol.token == Token::FLOAT_CONSTANT){
+        j["value"] = *((float*)(symbol.ptr));
+        return j;
+    }
+
+    if (symbol.token == Token::DOUBLE_CONSTANT){
+        j["value"] = *((double*)(symbol.ptr));
+        return j;
+    }
+        
+    if (symbol.token == Token::IDENTIFIER){
+        j["value"] = *((std::string*)(symbol.ptr));
+        return j;
+    }
+
+    j["value"] = "NULL";
+    return j;
+}
+
+nlohmann::json symbolTable2Json(SymbolTable &st){
+    nlohmann::json j;
+    j["table"] = nlohmann::json::array();
+
+    for (SymbolTable::iterator it = st.begin(); it != st.end(); it++){
+        j["table"].push_back(symbol2Json(*it));
+    }
+
+    return j;
+}
+
+void print(SymbolTable &st){
+    for (SymbolTable::iterator it = st.begin(); it != st.end(); it++){
+        Symbol symbol = *it;
+
+        std::cout << token2str[it->token] << ' ';
+
+        if (it->token == Token::INT_CONSTANT){
+            std::cout << *((int*)(it->ptr)) << std::endl;
+            continue;
+        }
+
+        if (it->token == Token::FLOAT_CONSTANT){
+            std::cout << *((float*)(it->ptr)) << std::endl;
+            continue;
+        }
+
+        if (it->token == Token::DOUBLE_CONSTANT){
+            std::cout << *((double*)(it->ptr)) << std::endl;
+            continue;
+        }
+            
+        if (it->token == Token::IDENTIFIER){
+            std::cout << *((std::string*)(it->ptr)) << std::endl;
+            continue;
+        }
+        std::cout << "NULL" << std::endl;
+    }
+}
