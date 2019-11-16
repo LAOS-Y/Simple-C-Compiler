@@ -270,6 +270,7 @@ typedef std::vector<Symbol> SymbolTable;
 
 nlohmann::json symbol2Json(Symbol symbol){
     nlohmann::json j;
+    j["type_idx"] = int(symbol.token);
     j["type"] = token2str[symbol.token];
 
     if (symbol.token == Token::INT_CONSTANT){
