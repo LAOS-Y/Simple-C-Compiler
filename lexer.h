@@ -83,6 +83,7 @@ enum Token{
     SIZEOF,
     SWITCH,
     WHILE,
+    FUNCTION,
     // KEYWORD END
 
     INT_CONSTANT,
@@ -170,6 +171,7 @@ std::map<std::string, Token> str2token{
     {"sizeof", Token::SIZEOF},
     {"switch", Token::SWITCH},
     {"while", Token::WHILE},
+    {"function", Token::FUNCTION}
     // KEYWORD END
 
 };
@@ -253,6 +255,7 @@ std::string token2str[] = {
     "$SIZEOF",
     "$SWITCH",
     "$WHILE",
+    "$FUNCTION",
     // KEYWORD END
 
     "$INT_CONSTANT",
